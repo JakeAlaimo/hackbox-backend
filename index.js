@@ -1,5 +1,11 @@
-const WebSocket = require("ws");
-const wss = new WebSocket.Server({port:80});
-wss.on("connection", ws => {
-    ws.send("something!");
-});
+const express = require("express");
+const ws = require("ws");
+const server = express()
+    .use((req, res) => res.send("Something fun"))
+    .listen(80, () => console.log("listening on 80"));
+
+const wss = new ws.Server({server});
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    ws.on('close', () => console.log('Client disconnected'));
+  });
