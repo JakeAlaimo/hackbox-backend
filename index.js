@@ -3,7 +3,9 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
 const PORT = process.env.PORT || 3000;
+const FAKE_ROOM = "AAAA";
 
+let rooms = new Set();
 
 app.get("/", (req, res) => {
     res.send("<p>This is the Hackbox backend. It is meant to be accessed with socket.io </p>");
@@ -12,11 +14,18 @@ app.get("/", (req, res) => {
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);
     socket.on("request room", () => {
-        socket.emit("request room", "AAAA"); //TODO make this randomly generated
+        if (!rooms.has(FAKE_ROOM))
+            rooms.add(FAKE_ROOM);
+        socket.emit("request room", FAKE_ROOM); //TODO make this randomly generated
     });
     socket.on("join", roomcode => {
-        socket.join(roomcode); //TODO add error handling to see if this room is valid/full
-        socket.emit("join", true);
+        if (rooms.has(roomcode)) {
+            socket.join(roomcode); //TODO add error handling to see if this room is valid/full
+            socket.emit("join", true);
+        }
+        else {
+            socket.emit("join", false);
+        }
     });
 });
 
