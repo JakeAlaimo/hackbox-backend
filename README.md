@@ -40,6 +40,14 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
   "roomcode": "ABCD"
 }
 ```
+**start game** - Returns the room code. Payload: 
+```js
+{
+  "category": "category_name",
+  "player1Name": "Name",
+  "player2Name": "Name"
+}
+```
 **vote** - Returns the vote status. Payload: 
 ```js
 {
