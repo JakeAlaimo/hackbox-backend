@@ -47,7 +47,9 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 }
 ```
 ## From Server
+
 **timeout** - Sends the room code. Payload: None
+
 **time changed** - Sends the new time. Payload: 
 ```js
 {
