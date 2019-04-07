@@ -1,11 +1,18 @@
 const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
+const fs = require("fs");
+const Room = require("./modules/room");
 
 const PORT = process.env.PORT || 3000;
 const FAKE_ROOM = "AAAA";
 
 let rooms = new Set();
+
+
+// Prepare csv data 
+let contents = fs.readFileSync("./data/categories.csv", "UTF8");
+let categories = contents.split(/,/gm);
 
 app.get("/", (req, res) => {
     res.send("<p>This is the Hackbox backend. It is meant to be accessed with socket.io </p>");
@@ -13,34 +20,45 @@ app.get("/", (req, res) => {
 
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);
+
     socket.on("request room", () => {
-        if (!rooms.has(FAKE_ROOM))
-            rooms.add(FAKE_ROOM);
-        socket.emit("request room", FAKE_ROOM); //TODO make this randomly generated
+        let res = {};
+        let room = new Room(getRandomRoomCode(), categories.slice(0));
+        rooms.add(room);
+        res.roomcode = room.code;
+        socket.emit("request room", JSON.stringify(res));      
     });
-    socket.on("join", roomcode => {
-        if (rooms.has(roomcode)) {
-            socket.join(roomcode); //TODO add error handling to see if this room is valid/full
-            socket.emit("join", true);
+
+    socket.on("join room", payload => {
+        let payloadObj = JSON.parse(payload);
+        let res = {};
+        if (rooms.has(payloadObj.roomcode)) {
+            socket.join(payloadObj.roomcode);
+            res.joined = true;
         }
         else {
-            socket.emit("join", false);
+            res.joined = false;
         }
+        socket.emit("join room", JSON.stringify(res));
     });
-});
 
-/*
-io.on("connection", (socket) => {
-    console.log("a user connected");
-    socket.on("chat message", msg => {
-        io.emit("chat message", msg);
+    socket.on("start game", payload => {
+        let payloadObj = JSON.parse(payload);
+        // Get and remove a random category from this room
+        // Pick two random sockets to be the players
     });
-    socket.on("disconnect", () => {
-        console.log("user disconnected");
-    })
 });
-*/
 
 http.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
+
+
+/**
+ * Returns a unique, random room code
+ */
+function getRandomRoomCode()
+{
+    // TODO Implement this
+    return "AAAA";
+}
