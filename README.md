@@ -19,6 +19,7 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 ```js
 {
   "roomcode": "ABCD",
+  "player": 0 // 0 or 1
   "submission": "Submission Text"
 }
 ```
@@ -26,21 +27,29 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 ```js
 {
   "roomcode": "ABCD",
-  "votee": 0 // 0 indicates player 1, 1 indicates player 2
+  "player": 0 // 0 indicates player 1, 1 indicates player 2
 }
 ```
 ## From Unity
 **request room** - Requests a new room. Payload: None
 
 
-## To Unity
+## From Server
+**timeout** - Informs clients that time is out. Payload: None
+
+**time changed** - Sends the new time. Payload: 
+```js
+{
+  "time": 59
+}
+```
 **request room** - Returns the room code. Payload: 
 ```js
 {
   "roomcode": "ABCD"
 }
 ```
-**start game** - Returns the room code. Payload: 
+**start game** - Returns information necessary to start the game. Payload: 
 ```js
 {
   "category": "category_name",
@@ -54,14 +63,16 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
   "percentage": 0 // 0 -> 1
 }
 ```
-## From Server
-
-**timeout** - Sends the room code. Payload: None
-
-**time changed** - Sends the new time. Payload: 
+**join room** - Returns whether or not the room was joined. Payload: 
 ```js
 {
-  "time": 59
+  "joined": true
 }
 ```
-
+**enter submission** - Returns the submission that was last entered. 
+```js
+{
+  "player": 1 // 1 or 2
+  "submission": "Submission Text"
+}
+```
