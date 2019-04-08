@@ -6,7 +6,8 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 **join room** - Add the socket to the room. Payload: 
 ```js
 {
-  "roomcode": "ABCD"
+  "roomcode": "ABCD",
+  "username": "user's username"
 }
 ```
 **start game** - Starts the game. Payload:
@@ -66,13 +67,14 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 **join room** - Returns whether or not the room was joined. Payload: 
 ```js
 {
-  "joined": true
+  "joined": true,
+  "failReason": "reason for failure"
 }
 ```
 **enter submission** - Returns the submission that was last entered. 
 ```js
 {
-  "player": 1 // 1 or 2
+  "player": 1 // 0 or 1
   "submission": "Submission Text"
 }
 ```
