@@ -66,7 +66,16 @@ io.on("connection", socket => {
         let selectedPlayers = room.selectPlayers();
         res.player1Name = selectedPlayers[0].username;
         res.player2Name = selectedPlayers[1].username;
-        io.to(payloadObj.roomcode).emit("start game", res);
+        io.to(payloadObj.roomcode).emit("start game", JSON.stringify(res));
+    });
+
+    socket.on("enter submission", payload => {
+        let payloadObj = JSON.parse(payload);
+        let res = {
+            player: payloadObj.player,
+            submission: payloadObj.submission
+        };
+        io.to(payloadObj.roomcode).emit("enter submission", JSON.stringify(res));
     });
 });
 
