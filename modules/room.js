@@ -13,6 +13,7 @@ class Room {
         this.categories = categories;
         this.players = []; // Array of player objects
         this.selectedPlayers = []; // Array of selected player indexes
+        this.lifetime = 60; // In seconds TODO make this customizable
     }
     
     
@@ -34,6 +35,18 @@ class Room {
         }        
         this.selectedPlayers = selectedIndexes.map(index => this.players[index]);
         return this.selectedPlayers;
+    }
+
+    /**
+     * Returns the display percentage based on the two selected players' scores
+     */
+    getDisplayPercentage() {
+        // Array destructuring to extract player scores
+        const [score1, score2] = this.selectedPlayers.map(player => player.score);
+        if (score1 == 0 && score2 == 0) {
+            return .5;
+        }
+        return score1 / (score1 + score2);
     }
     
     /**

@@ -10,13 +10,14 @@ const FAKE_ROOM = "AAAA";
 
 let rooms = new Map();
 
-
-// Prepare csv data 
+// Prepare csv data
 let contents = fs.readFileSync("./data/categories.csv", "UTF8");
 let categories = contents.split(/,/gm);
 
 app.get("/", (req, res) => {
-    res.send("<p>This is the Hackbox backend. It is meant to be accessed with socket.io </p>");
+    res.send(
+        "<p>This is the Hackbox backend. It is meant to be accessed with socket.io </p>"
+    );
 });
 
 io.on("connection", socket => {
@@ -24,10 +25,10 @@ io.on("connection", socket => {
 
     socket.on("request room", () => {
         let res = {};
-        let room = new Room(getRandomRoomCode(), categories.slice(0)); // Pass in a copy of categories 
+        let room = new Room(getRandomRoomCode(), categories.slice(0)); // Pass in a copy of categories
         rooms.set(room.code, room);
         res.roomcode = room.code;
-        socket.emit("request room", JSON.stringify(res));      
+        socket.emit("request room", JSON.stringify(res));
     });
 
     socket.on("join room", payload => {
@@ -39,15 +40,13 @@ io.on("connection", socket => {
             if (room.hasPlayer(payloadObj.username)) {
                 res.joined = false;
                 res.failReason = "Username is taken";
-            } 
-            else {
+            } else {
                 socket.join(payloadObj.roomcode);
                 room.players.push(new Player(payloadObj.username));
                 res.joined = true;
                 res.failReason = "";
             }
-        }
-        else {
+        } else {
             res.joined = false;
             res.failReason = "Room does not exist";
         }
@@ -67,6 +66,27 @@ io.on("connection", socket => {
         res.player1Name = selectedPlayers[0].username;
         res.player2Name = selectedPlayers[1].username;
         io.to(payloadObj.roomcode).emit("start game", JSON.stringify(res));
+
+        // Broadcast an initial time changed event
+        let initTimeChangedRes = {};
+        initTimeChangedRes.time = room.lifetime;
+        io.to(payloadObj.roomcode).emit(
+            "time changed",
+            JSON.stringify(initTimeChangedRes)
+        );
+        // Start the timer event
+        let interval = setInterval(() => {
+            let res = {};
+            res.time = --room.lifetime;
+            io.to(payloadObj.roomcode).emit(
+                "time changed",
+                JSON.stringify(res)
+            );
+            if (res.time <= 0) {
+                io.to(payloadObj.roomcode).emit("timeout");
+                clearInterval(interval);
+            }
+        }, 1000);
     });
 
     socket.on("enter submission", payload => {
@@ -75,7 +95,20 @@ io.on("connection", socket => {
             player: payloadObj.player,
             submission: payloadObj.submission
         };
-        io.to(payloadObj.roomcode).emit("enter submission", JSON.stringify(res));
+        io.to(payloadObj.roomcode).emit(
+            "enter submission",
+            JSON.stringify(res)
+        );
+    });
+
+    socket.on("vote", payload => {
+        let payloadObj = JSON.parse(payload);
+        let room = rooms.get(payloadObj.roomcode);
+        let votedPlayer = room.selectedPlayers[payloadObj.player];
+        votedPlayer.score++;
+        let percentage = room.getDisplayPercentage();
+        let res = { percentage };
+        io.to(payloadObj.roomcode).emit("vote", JSON.stringify(res));
     });
 });
 
@@ -83,12 +116,10 @@ http.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
 
-
 /**
  * Returns a unique, random room code
  */
-function getRandomRoomCode()
-{
+function getRandomRoomCode() {
     // TODO Implement this
     return "ABCD";
 }
