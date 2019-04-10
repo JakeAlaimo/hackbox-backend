@@ -28,6 +28,10 @@ io.on("connection", socket => {
         let room = new Room(getRandomRoomCode(), categories.slice(0)); // Pass in a copy of categories
         rooms.set(room.code, room);
         res.roomcode = room.code;
+
+        // Also join this client to the room
+        socket.join(room.code);
+
         socket.emit("request room", JSON.stringify(res));
     });
 
