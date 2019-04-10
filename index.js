@@ -120,6 +120,22 @@ http.listen(PORT, () => {
  * Returns a unique, random room code
  */
 function getRandomRoomCode() {
-    // TODO Implement this
-    return "ABCD";
+    let roomCode;
+    let char;
+
+    do{
+        roomCode = ""; //reset the room code
+
+        for(let i = 0; i < 4; i=i+1)
+        {
+            //get random ascii char from A-Z
+            char = 65 + Math.floor(Math.random() * 26);
+
+            //add it to the roomcode string
+            roomCode += String.fromCharCode(char);
+        }
+
+    } while(rooms.has(roomCode)); //loop until the room code is unique
+
+    return roomCode;
 }
