@@ -43,15 +43,18 @@ io.on("connection", socket => {
             // If this room already has this username
             if (room.hasPlayer(payloadObj.username)) {
                 res.joined = false;
+                res.username = "";
                 res.failReason = "Username is taken";
             } else {
                 socket.join(payloadObj.roomcode);
                 room.players.push(new Player(payloadObj.username));
                 res.joined = true;
+                res.username = payloadObj.username;
                 res.failReason = "";
             }
         } else {
             res.joined = false;
+            res.username = "";
             res.failReason = "Room does not exist";
         }
         socket.emit("join room", JSON.stringify(res));
