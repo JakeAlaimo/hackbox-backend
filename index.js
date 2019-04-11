@@ -1,6 +1,6 @@
 const app = require("express")();
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {pingInterval: 500});
 const fs = require("fs");
 const Room = require("./modules/room");
 const Player = require("./modules/player");
