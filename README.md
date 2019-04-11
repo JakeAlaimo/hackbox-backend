@@ -68,6 +68,7 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 ```js
 {
   "joined": true,
+  "username": "playerUserName",
   "failReason": "reason for failure"
 }
 ```

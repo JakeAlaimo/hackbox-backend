@@ -28,6 +28,10 @@ io.on("connection", socket => {
         let room = new Room(getRandomRoomCode(), categories.slice(0)); // Pass in a copy of categories
         rooms.set(room.code, room);
         res.roomcode = room.code;
+
+        // Also join this client to the room
+        socket.join(room.code);
+
         socket.emit("request room", JSON.stringify(res));
     });
 
@@ -44,18 +48,25 @@ io.on("connection", socket => {
             // If this room already has this username
             if (room.hasPlayer(payloadObj.username)) {
                 res.joined = false;
+                res.username = "";
                 res.failReason = "Username is taken";
+                socket.emit("join room", JSON.stringify(res));
             } else {
                 socket.join(payloadObj.roomcode);
                 room.players.push(new Player(payloadObj.username));
                 res.joined = true;
+                res.username = payloadObj.username;
                 res.failReason = "";
+                // Notify the entire room of success
+                io.to(payloadObj.roomcode).emit("join room", JSON.stringify(res));
             }
         } else {
             res.joined = false;
+            res.username = "";
             res.failReason = "Room does not exist";
+            socket.emit("join room", JSON.stringify(res));
+
         }
-        socket.emit("join room", JSON.stringify(res));
     });
 
     socket.on("start game", payload => {
@@ -125,6 +136,22 @@ http.listen(PORT, () => {
  * Returns a unique, random room code
  */
 function getRandomRoomCode() {
-    // TODO Implement this
-    return "ABCD";
+    let roomCode;
+    let char;
+
+    do{
+        roomCode = ""; //reset the room code
+
+        for(let i = 0; i < 4; i=i+1)
+        {
+            //get random ascii char from A-Z
+            char = 65 + Math.floor(Math.random() * 26);
+
+            //add it to the roomcode string
+            roomCode += String.fromCharCode(char);
+        }
+
+    } while(rooms.has(roomCode)); //loop until the room code is unique
+
+    return roomCode;
 }
