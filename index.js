@@ -35,11 +35,6 @@ io.on("connection", socket => {
         socket.emit("request room", JSON.stringify(res));
     });
 
-    socket.on("rejoin room", payload => {
-        let roomcode = JSON.parse(payload).roomcode;
-        socket.join(roomcode);
-    });
-
     socket.on("join room", payload => {
         let payloadObj = JSON.parse(payload);
         let res = {};
