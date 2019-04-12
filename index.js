@@ -41,7 +41,7 @@ io.on("connection", socket => {
             payloadObj = JSON.parse(payload);
         } 
         catch (e) {
-            socket.emit("error", JSON.stringify({"error": "Invalid json format"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
             return;
         }
         let res = {};
@@ -77,18 +77,18 @@ io.on("connection", socket => {
             payloadObj = JSON.parse(payload);
         } 
         catch (e) {
-            socket.emit("error", JSON.stringify({"error": "Invalid json format"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
             return;
         }
         let res = {};
         // Get and remove a random category from this room
         let room = rooms.get(payloadObj.roomcode);
         if (!room) {
-            socket.emit("error", JSON.stringify({"error": "Roomcode does not exist"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Roomcode does not exist"}));
             return;
         }
         if (room.players.length < 2) {
-            socket.emit("error", JSON.stringify({"error": "Room does not have enough players"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Room does not have enough players"}));
             return;
         }
         // TODO explore condition where all categories are played
@@ -128,7 +128,7 @@ io.on("connection", socket => {
             payloadObj = JSON.parse(payload);
         } 
         catch (e) {
-            socket.emit("error", JSON.stringify({"error": "Invalid json format"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
             return;
         }
         let res = {
@@ -147,16 +147,16 @@ io.on("connection", socket => {
             payloadObj = JSON.parse(payload);
         } 
         catch (e) {
-            socket.emit("error", JSON.stringify({"error": "Invalid json format"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
             return;
         }
         let room = rooms.get(payloadObj.roomcode);
         if (!room) {
-            socket.emit("error", JSON.stringify({"error": "Roomcode does not exist"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "Roomcode does not exist"}));
             return;
         }
         if (!("player" in payloadObj)) {
-            socket.emit("error", JSON.stringify({"error": "player missing from json object"}));
+            socket.emit("game_error", JSON.stringify({"game_error": "player missing from json object"}));
             return;
         }
         let votedPlayer = room.selectedPlayers[payloadObj.player];
