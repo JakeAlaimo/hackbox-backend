@@ -79,3 +79,9 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
   "submission": "Submission Text"
 }
 ```
+
+**error** - Returns the error that occured
+```js
+{
+  "error": "Reason for error"
+}
