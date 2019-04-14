@@ -46,7 +46,7 @@ class Room {
         if (score1 == 0 && score2 == 0) {
             return .5;
         }
-        return score1 / (score1 + score2);
+        return score2 / (score1 + score2);
     }
     
     /**
