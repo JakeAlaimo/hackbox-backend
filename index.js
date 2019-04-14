@@ -121,6 +121,10 @@ io.on("connection", socket => {
             if (res.time <= 0) {
                 io.to(payloadObj.roomcode).emit("timeout");
                 clearInterval(interval);
+
+                //reset the scores of each player
+                room.selectedPlayers[0] = 0;
+                room.selectedPlayers[1] = 0;
             }
         }, 1000);
     });
