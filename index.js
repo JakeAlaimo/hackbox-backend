@@ -100,6 +100,9 @@ io.on("connection", socket => {
         res.player2Name = selectedPlayers[1].username;
         io.to(payloadObj.roomcode).emit("start game", JSON.stringify(res));
 
+        //TODO consider allowing customizable intervals
+        room.lifetime = 60 //reset the game lifetime
+
         // Broadcast an initial time changed event
         let initTimeChangedRes = {};
         initTimeChangedRes.time = room.lifetime;
