@@ -123,8 +123,8 @@ io.on("connection", socket => {
                 clearInterval(interval);
 
                 //reset the scores of each player
-                room.selectedPlayers[0] = 0;
-                room.selectedPlayers[1] = 0;
+                room.selectedPlayers[0].score = 0;
+                room.selectedPlayers[1].score = 0;
             }
         }, 1000);
     });
