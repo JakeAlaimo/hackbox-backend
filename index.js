@@ -6,8 +6,6 @@ const Room = require("./modules/room");
 const Player = require("./modules/player");
 
 const PORT = process.env.PORT || 3000;
-const FAKE_ROOM = "AAAA";
-
 let rooms = new Map();
 
 // Prepare csv data
@@ -171,6 +169,10 @@ io.on("connection", socket => {
         let percentage = room.getDisplayPercentage();
         let res = { percentage };
         io.to(payloadObj.roomcode).emit("vote", JSON.stringify(res));
+    });
+
+    socket.on("disconnect", () => {
+        
     });
 });
 
