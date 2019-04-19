@@ -18,6 +18,13 @@ app.get("/", (req, res) => {
     );
 });
 
+/**
+ * Handling disconnects
+ * Mid-game, if someone drops a connection, we should give them a chance to rejoin
+ * When the game gets restarted, we confirm that the registered players match the players in the room. 
+ *  If not, drop those that are no longer in socket.io's room
+ */
+
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);
 
@@ -172,7 +179,7 @@ io.on("connection", socket => {
     });
 
     socket.on("disconnect", () => {
-        
+        console.log(`${socket.id} disconnected`);
     });
 });
 
