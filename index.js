@@ -224,6 +224,34 @@ io.on("connection", socket => {
         io.to(payloadObj.roomcode).emit("vote", JSON.stringify(res));
     });
 
+    socket.on("close room", (payload) => {
+        let payloadObj;
+        try {
+            payloadObj = JSON.parse(payload);
+        } 
+        catch (e) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
+            return;
+        }
+        let room = rooms.get(payloadObj.roomcode);
+        if (!room) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Roomcode does not exist"}));
+            return;
+        }
+        
+        io.to(payloadObj.roomcode).emit("close room");
+        // Remove socket.io room
+        io.of("/").in(payloadObj.roomcode).clients((error, socketIds) => {
+            if (error) {
+                console.log(error);
+                return;
+            }
+            socketIds.forEach(socketId => io.sockets.sockets[socketId].leave(payloadObj.roomcode));
+        });
+        // Remove the room from the map
+        rooms.delete(payloadObj.roomcode);
+    });
+
     socket.on("disconnect", () => {
         console.log(`${socket.id} disconnected`);
     });

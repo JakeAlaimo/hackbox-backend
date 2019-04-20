@@ -40,7 +40,12 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 ```
 ## From Unity
 **request room** - Requests a new room. Payload: None
-
+**close room** - Closes the room. Payload
+```js
+{
+  "roomcode": "ABCD"
+}
+```
 
 ## From Server
 **timeout** - Informs clients that time is out. Payload: None
@@ -100,3 +105,6 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 {
   "error": "Reason for error"
 }
+```
+
+**close room** - Informs room that this room is now closed. Payload: none.
