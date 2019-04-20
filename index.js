@@ -176,7 +176,7 @@ io.on("connection", socket => {
         }
         let votedPlayer = room.selectedPlayers[payloadObj.player];
         console.log(votedPlayer);
-        votedPlayer.score.AddPoints();
+        votedPlayer.score.AddPoint();
         let percentage = room.getDisplayPercentage();
         let res = { percentage };
         io.to(payloadObj.roomcode).emit("vote", JSON.stringify(res));
