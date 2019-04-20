@@ -101,8 +101,8 @@ io.on("connection", socket => {
         res.category = category;
         // Pick two random sockets to be the players
         let selectedPlayers = room.selectPlayers();
-        res.player1Name = selectedPlayers[0].username;
-        res.player2Name = selectedPlayers[1].username;
+        res.player1Name = room.players[selectedPlayers[0]].username;
+        res.player2Name = room.players[selectedPlayers[1]].username;
         io.to(payloadObj.roomcode).emit("start game", JSON.stringify(res));
 
         //TODO consider allowing customizable intervals
@@ -174,8 +174,8 @@ io.on("connection", socket => {
             socket.emit("game_error", JSON.stringify({"game_error": "player missing from json object"}));
             return;
         }
-        let votedPlayer = room.selectedPlayers[payloadObj.player];
-        votedPlayer.score++;
+        let votedPlayer = room.players[room.selectedPlayers[payloadObj.player]];
+        votedPlayer.score.AddPoint();
         let percentage = room.getDisplayPercentage();
         let res = { percentage };
         io.to(payloadObj.roomcode).emit("vote", JSON.stringify(res));
