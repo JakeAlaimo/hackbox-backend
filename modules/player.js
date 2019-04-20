@@ -1,4 +1,4 @@
-const Score = require("./modules/score");
+const Score = require("./score");
 
 class Player {
     constructor(username) {
