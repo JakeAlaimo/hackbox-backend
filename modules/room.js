@@ -30,11 +30,10 @@ class Room {
         let selectedIndexes = [];
         for (let i = 0; i < 2; ++i) {
             let randI = parseInt(Math.random() * indexes.length);
-            //selectedIndexes.push(indexes[randI]);
-            this.selectedPlayers[0] = indexes[randI];
+            selectedIndexes.push(indexes[randI]);
             indexes.splice(randI, 1);
         }        
-        //this.selectedPlayers = selectedIndexes.map(index => this.players[index]);
+        this.selectedPlayers = selectedIndexes.map(index => this.players[index]);
         return this.selectedPlayers;
     }
 
@@ -57,8 +56,8 @@ class Room {
         // Array destructuring to extract player scores
         //const [score1, score2] = this.selectedPlayers.map(player => {player.score.SumPoints();});
 
-        let score1 = this.players[this.selectedPlayers[0]].score.SumPoints();
-        let score2 = this.players[this.selectedPlayers[1]].score.SumPoints();
+        let score1 = this.selectedPlayers[0].score.SumPoints();
+        let score2 = this.selectedPlayers[1].score.SumPoints();
 
         if (score1 == 0 && score2 == 0) {
             return .5;

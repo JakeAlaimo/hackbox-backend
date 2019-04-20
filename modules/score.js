@@ -23,6 +23,11 @@ class Score
         return sum;
     }
 
+    ClearScore()
+    {
+        this.scoreOverTime = this.scoreOverTime.map(x=> 0);
+    }
+
     //Called every second. Move each score counter over a second.
     ShiftScores()
     {
