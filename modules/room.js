@@ -38,11 +38,23 @@ class Room {
     }
 
     /**
+     * Removes old points from each player's score
+     */
+    shiftScores(){
+
+        for(let i = 0; i < this.players.length; i++)
+        {
+            this.players[i].score.ShiftScore();
+        }
+
+    }
+
+    /**
      * Returns the display percentage based on the two selected players' scores
      */
     getDisplayPercentage() {
         // Array destructuring to extract player scores
-        const [score1, score2] = this.selectedPlayers.map(player => player.score);
+        const [score1, score2] = this.selectedPlayers.map(player => player.score.SumPoints());
         if (score1 == 0 && score2 == 0) {
             return .5;
         }

@@ -119,6 +119,9 @@ io.on("connection", socket => {
         let interval = setInterval(() => {
             let res = {};
             res.time = --room.lifetime;
+
+            room.shiftScores();
+
             io.to(payloadObj.roomcode).emit(
                 "time changed",
                 JSON.stringify(res)
