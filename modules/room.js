@@ -44,7 +44,7 @@ class Room {
 
         for(let i = 0; i < this.players.length; i++)
         {
-            this.players[i].score.ShiftScore();
+            this.players[i].score.ShiftScores();
         }
 
     }
