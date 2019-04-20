@@ -54,7 +54,7 @@ class Room {
      */
     getDisplayPercentage() {
         // Array destructuring to extract player scores
-        const [score1, score2] = this.selectedPlayers.map(player => player.score.SumPoints());
+        const [score1, score2] = this.selectedPlayers.map(player => {player.score.SumPoints();});
         if (score1 == 0 && score2 == 0) {
             return .5;
         }
