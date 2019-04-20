@@ -7,7 +7,14 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 ```js
 {
   "roomcode": "ABCD",
-  "username": "user's username"
+  "username": "user's username",
+}
+```
+**rejoin room** - Re-add the socket to the room. Payload: 
+```js
+{
+  "roomcode": "ABCD",
+  "username": "user's username",
 }
 ```
 **start game** - Starts the game. Payload:
@@ -70,6 +77,14 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
   "joined": true,
   "username": "playerUserName",
   "failReason": "reason for failure"
+}
+```
+**rejoin room** - Re-add the socket to the room. Payload: 
+```js
+{
+  "rejoined": true,
+  "roomcode": "ABCD",
+  "username": "user's username",
 }
 ```
 **enter submission** - Returns the submission that was last entered. 

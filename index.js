@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
  */
 
 io.on("connection", socket => {
-    console.log(`${socket.id} connected`);
+    // console.log(`${socket.id} connected with ip ${socket.handshake.address} and port ${socket.conn.request}`);
 
     socket.on("request room", () => {
         let res = {};
@@ -73,6 +73,39 @@ io.on("connection", socket => {
             res.failReason = "Room does not exist";
             socket.emit("join room", JSON.stringify(res));
 
+        }
+    });
+    socket.on("rejoin room", payload => {
+        let payloadObj;
+        try {
+            payloadObj = JSON.parse(payload);
+        } 
+        catch (e) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
+            return;
+        }
+        let res = {};
+        if (rooms.has(payloadObj.roomcode)) {
+            let room = rooms.get(payloadObj.roomcode);
+            // If this room already has this username, it's a valid rejoin
+            if (room.hasPlayer(payloadObj.username)) {
+                socket.join(payloadObj.roomcode);
+                res.rejoined = true;
+                res.username = payloadObj.username;
+                res.failReason = "";
+                // Notify just this socket of success
+                socket.emit("rejoin room", JSON.stringify(res));
+            } else {
+                res.rejoined = false;
+                res.username = "";
+                res.failReason = "Username is taken";
+                socket.emit("rejoin room", JSON.stringify(res));
+            }
+        } else {
+            res.rejoined = false;
+            res.username = "";
+            res.failReason = "Room does not exist";
+            socket.emit("rejoin room", JSON.stringify(res));
         }
     });
 
