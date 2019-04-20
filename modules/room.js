@@ -14,6 +14,7 @@ class Room {
         this.players = []; // Array of player objects
         this.selectedPlayers = []; // Array of selected player indexes
         this.lifetime = 60; // In seconds TODO make this customizable
+        this.inProgress = false;
     }
     
     

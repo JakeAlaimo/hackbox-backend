@@ -52,6 +52,14 @@ io.on("connection", socket => {
         let res = {};
         if (rooms.has(payloadObj.roomcode)) {
             let room = rooms.get(payloadObj.roomcode);
+
+            if (room.inProgress) {
+                res.joined = false;
+                res.username = "";
+                res.failReason = "Game is already in progress";
+                socket.emit("join room", JSON.stringify(res));
+            }
+
             // If this room already has this username
             if (room.hasPlayer(payloadObj.username)) {
                 res.joined = false;
@@ -140,6 +148,7 @@ io.on("connection", socket => {
 
         //TODO consider allowing customizable intervals
         room.lifetime = 60 //reset the game lifetime
+        room.inProgress = true;
 
         // Broadcast an initial time changed event
         let initTimeChangedRes = {};
