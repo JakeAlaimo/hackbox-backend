@@ -138,6 +138,12 @@ io.on("connection", socket => {
             socket.emit("game_error", JSON.stringify({"game_error": "Room does not have enough players"}));
             return;
         }
+
+        if (room.inProgress) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Game is already in progress"}));
+            return;
+        }
+
         // TODO explore condition where all categories are played
         let category = room.getAndRemoveRandomCategory();
         res.category = category;
