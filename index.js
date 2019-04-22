@@ -179,6 +179,7 @@ io.on("connection", socket => {
                 let timeoutRes = {
                     winner: room.getDisplayPercentage() < .5 ? 0 : 1
                 }
+                room.inProgress = false;
                 io.to(payloadObj.roomcode).emit("timeout", JSON.stringify(timeoutRes));
                 clearInterval(interval);
 
