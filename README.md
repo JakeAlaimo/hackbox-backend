@@ -48,7 +48,12 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 ```
 
 ## From Server
-**timeout** - Informs clients that time is out. Payload: None
+**timeout** - Informs clients that time is out. Payload: 
+```js
+{
+  "winner": 0 // or 1
+}
+```
 
 **time changed** - Sends the new time. Payload: 
 ```js

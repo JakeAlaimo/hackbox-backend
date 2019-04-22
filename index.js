@@ -58,6 +58,7 @@ io.on("connection", socket => {
                 res.username = "";
                 res.failReason = "Game is already in progress";
                 socket.emit("join room", JSON.stringify(res));
+                return;
             }
 
             // If this room already has this username
@@ -169,7 +170,10 @@ io.on("connection", socket => {
                 JSON.stringify(res)
             );
             if (res.time <= 0) {
-                io.to(payloadObj.roomcode).emit("timeout");
+                let timeoutRes = {
+                    winner: room.getDisplayPercentage() < .5 ? 0 : 1
+                }
+                io.to(payloadObj.roomcode).emit("timeout", JSON.stringify(timeoutRes));
                 clearInterval(interval);
 
                 //reset the scores of each player
@@ -217,7 +221,6 @@ io.on("connection", socket => {
             return;
         }
         let votedPlayer = room.selectedPlayers[payloadObj.player];
-        console.log(votedPlayer);
         votedPlayer.score.AddPoint();
         let percentage = room.getDisplayPercentage();
         let res = { percentage };
