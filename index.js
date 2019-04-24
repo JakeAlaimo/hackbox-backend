@@ -154,7 +154,7 @@ io.on("connection", socket => {
         io.to(payloadObj.roomcode).emit("start game", JSON.stringify(res));
 
         //TODO consider allowing customizable intervals
-        room.lifetime = 60 //reset the game lifetime
+        room.lifetime = 20; //reset the game lifetime
         room.inProgress = true;
 
         // Broadcast an initial time changed event
@@ -167,7 +167,8 @@ io.on("connection", socket => {
         // Start the timer event
         let interval = setInterval(() => {
             let res = {};
-            res.time = --room.lifetime;
+            room.lifetime -= 0.5;
+            res.time = room.lifetime;
 
             room.shiftScores();
 
@@ -187,7 +188,7 @@ io.on("connection", socket => {
                 room.selectedPlayers[0].score.ClearScore();
                 room.selectedPlayers[1].score.ClearScore();
             }
-        }, 1000);
+        }, 500);
     });
 
     socket.on("enter submission", payload => {

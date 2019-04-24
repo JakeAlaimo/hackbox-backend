@@ -2,7 +2,7 @@ class Score
 {
     constructor() {
 
-        this.scoreOverTime = [0,0,0,0,0]; //keeps track of scores spanning the last 5 seconds
+        this.scoreOverTime = [0,0]; //keeps track of scores spanning the last 5 seconds
     }
 
     AddPoint()
