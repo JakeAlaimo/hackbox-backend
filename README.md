@@ -86,7 +86,8 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
 {
   "joined": true,
   "username": "playerUserName",
-  "failReason": "reason for failure"
+  "failReason": "reason for failure",
+  "playerCount": 3
 }
 ```
 **rejoin room** - Re-add the socket to the room. Payload: 

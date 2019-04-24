@@ -53,6 +53,9 @@ io.on("connection", socket => {
         if (rooms.has(payloadObj.roomcode)) {
             let room = rooms.get(payloadObj.roomcode);
 
+
+            res.playerCount = room.players.length;
+
             if (room.inProgress) {
                 res.joined = false;
                 res.username = "";
@@ -73,6 +76,7 @@ io.on("connection", socket => {
                 res.joined = true;
                 res.username = payloadObj.username;
                 res.failReason = "";
+                res.playerCount = room.players.length;
                 // Notify the entire room of success
                 io.to(payloadObj.roomcode).emit("join room", JSON.stringify(res));
             }
@@ -80,6 +84,7 @@ io.on("connection", socket => {
             res.joined = false;
             res.username = "";
             res.failReason = "Room does not exist";
+            res.playerCount = 0;
             socket.emit("join room", JSON.stringify(res));
 
         }
