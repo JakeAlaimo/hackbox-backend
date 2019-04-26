@@ -5,7 +5,7 @@ const Player = require("./player");
 class Room {
     /**
      * Create a new room
-     * @param {String} code room code 
+     * @param {String} code room code
      * @param {String[]} categories array of possible categories
      */
     constructor(code, categories) {
@@ -13,6 +13,7 @@ class Room {
         this.categories = categories;
         this.players = []; // Array of player objects
         this.selectedPlayers = []; // Array of selected player indexes
+        this.playedplayer = []; // Array of played player indexes
         this.startLifetime = 20;
         this.resetLifetime(); // In seconds TODO make this customizable
         this.inProgress = false;
@@ -21,8 +22,8 @@ class Room {
     resetLifetime() {
         this.lifetime = this.startLifetime;
     }
-    
-    
+
+
     hasPlayer(username) {
         return this.players.filter(player => player.username == username).length == 1;
     }
@@ -33,14 +34,30 @@ class Room {
      */
     selectPlayers() {
         let indexes = this.players.map((p, i) => i);
-        let selectedIndexes = [];
+        this.selectedPlayers = [];
+        this.temp = this.players.filter(player=> !this.playedplayer.includes(player));
+        //this.temp is the unselected player list
+        if (this.temp.length <2){
+        // if the unselected player is less than 2 people
+            this.playedplayer=[];// reset the playedplayer list
+            this.temp = this.players.filter(player=> !this.playedplayer.includes(player));
+        }
+
         for (let i = 0; i < 2; ++i) {
-            let randI = parseInt(Math.random() * indexes.length);
-            selectedIndexes.push(indexes[randI]);
-            indexes.splice(randI, 1);
-        }        
-        this.selectedPlayers = selectedIndexes.map(index => this.players[index]);
-        return this.selectedPlayers;
+            let randI = parseInt(Math.random() * this.temp.length);
+            var tempPlayer = this.temp[randI];
+            // double check the player is not int played list, in fact it should never
+            // get into this while loop
+            while(this.playedplayer.includes(tempPlayer)){
+                randI = parseInt(Math.random() * this.temp.length);
+                tempPlayer = this.temp[randI];
+            }
+
+            this.selectedPlayers.push(this.temp[randI]);
+            this.playedplayer.push(this.temp[randI]);
+            }
+
+            return this.selectedPlayers;
     }
 
     /**
@@ -70,7 +87,7 @@ class Room {
         }
         return score2 / (score1 + score2);
     }
-    
+
     /**
      * Get and return a random category, while also removing it from the categories array
      * @returns {String} the category
