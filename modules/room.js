@@ -13,11 +13,11 @@ class Room {
         this.categories = categories;
         this.players = []; // Array of player objects
         this.selectedPlayers = []; // Array of selected player indexes
-        this.playedplayer = []; // Array of played player indexes
+        this.playedplayers = []; // Array of played player indexes
         this.startLifetime = 20;
         this.resetLifetime(); // In seconds TODO make this customizable
         this.inProgress = false;
-        this.temp=[];
+        this.unselectedPlayers=[];
     }
 
     resetLifetime() {
@@ -34,31 +34,24 @@ class Room {
      * @return {Player[]} The selected players
      */
     selectPlayers() {
-        let indexes = this.players.map((p, i) => i);
         this.selectedPlayers = [];
-        this.temp = this.players.filter(player=> !this.playedplayer.includes(player));
-        //this.temp is the unselected player list
-        if (this.temp.length <2){
-        // if the unselected player is less than 2 people
-            this.playedplayer=[];// reset the playedplayer list
-            this.temp = this.players.filter(player=> !this.playedplayer.includes(player));
-        }
+        this.unselectedPlayers = this.players.filter(player=> !this.playedplayers.includes(player));
 
         for (let i = 0; i < 2; ++i) {
-            let randI = parseInt(Math.random() * this.temp.length);
-            var tempPlayer = this.temp[randI];
-            // double check the player is not int played list, in fact it should never
-            // get into this while loop
-            while(this.playedplayer.includes(tempPlayer)){
-                randI = parseInt(Math.random() * this.temp.length);
-                tempPlayer = this.temp[randI];
-            }
+            let randI = parseInt(Math.random() * this.unselectedPlayers.length);
+            let curSelectedPlayer = this.unselectedPlayers[randI];
+            this.selectedPlayers.push(curSelectedPlayer);
+            this.playedplayers.push(curSelectedPlayer);
 
-            this.selectedPlayers.push(this.temp[randI]);
-            this.playedplayer.push(this.temp[randI]);
+            this.unselectedPlayers.splice(this.unselectedPlayers.indexOf(curSelectedPlayer), 1);
+            if (this.unselectedPlayers.length == 0) {
+                this.playedplayers=[];// reset the playedplayer list
+                this.playedplayers.push(curSelectedPlayer);
+                this.unselectedPlayers = this.players.filter(player=> !this.playedplayers.includes(player));
             }
+        }
 
-            return this.selectedPlayers;
+        return this.selectedPlayers;
     }
 
     /**
