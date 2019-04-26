@@ -17,6 +17,7 @@ class Room {
         this.startLifetime = 20;
         this.resetLifetime(); // In seconds TODO make this customizable
         this.inProgress = false;
+        this.temp=[];
     }
 
     resetLifetime() {
