@@ -123,6 +123,35 @@ io.on("connection", socket => {
         }
     });
 
+    socket.on("everybody in", payload => {
+        let payloadObj;
+        try {
+            payloadObj = JSON.parse(payload);
+        } 
+        catch (e) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Invalid json format"}));
+            return;
+        }
+        let res = {};
+        // Get and remove a random category from this room
+        let room = rooms.get(payloadObj.roomcode);
+        if (!room) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Roomcode does not exist"}));
+            return;
+        }
+        if (room.players.length < 2) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Room does not have enough players"}));
+            return;
+        }
+
+        if (room.inProgress) {
+            socket.emit("game_error", JSON.stringify({"game_error": "Game is already in progress"}));
+            return;
+        }
+        io.to(payloadObj.roomcode).emit("everybody in");
+
+    });
+
     socket.on("start game", payload => {
         let payloadObj;
         try {

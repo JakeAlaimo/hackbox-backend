@@ -17,6 +17,12 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
   "username": "user's username",
 }
 ```
+**everybody in** - Inform server that everybody is in. Payload:
+```js
+{
+  "roomcode": "ABCD"
+}
+```
 **start game** - Starts the game. Payload:
 ```js
 {
@@ -67,6 +73,7 @@ This is the hackbox backend built with socket.io. It's only a mirror of what is 
   "roomcode": "ABCD"
 }
 ```
+**everybody in** - Callback that everybody is in. Only Unity Client should care about this. Payload: None
 **start game** - Returns information necessary to start the game. Payload: 
 ```js
 {
