@@ -18,15 +18,7 @@ app.get("/", (req, res) => {
     );
 });
 
-/**
- * Handling disconnects
- * Mid-game, if someone drops a connection, we should give them a chance to rejoin
- * When the game gets restarted, we confirm that the registered players match the players in the room. 
- *  If not, drop those that are no longer in socket.io's room
- */
-
 io.on("connection", socket => {
-    // console.log(`${socket.id} connected with ip ${socket.handshake.address} and port ${socket.conn.request}`);
 
     socket.on("request room", () => {
         let res = {};

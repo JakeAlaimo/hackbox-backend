@@ -1,3 +1,6 @@
+/**
+ * Represents the score that a player has
+ */
 class Score
 {
     constructor() {

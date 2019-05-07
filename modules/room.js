@@ -20,11 +20,18 @@ class Room {
         this.unselectedPlayers=[];
     }
 
+    /**
+     * Resets the lifetime of the room
+     */
     resetLifetime() {
         this.lifetime = this.startLifetime;
     }
 
 
+    /**
+     * Returns true if this room has the provided username, false otherwise
+     * @param {String} username
+     */
     hasPlayer(username) {
         return this.players.filter(player => player.username == username).length == 1;
     }
