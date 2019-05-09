@@ -6,6 +6,14 @@ This is the Hackbox backend built with socket.io. It's only a mirror of what is 
 ## The Big Picture
 Hackbox is a replication of Jackbox communication methods in the form of a category guessing game. Players use their smartphone web browsers to input and vote on player submissions. The project is broken into three components: a Node.js backend, a [Web client](https://github.com/dan-singer/hackbox-web-client), and a [Unity client](https://github.com/lzhangivy/hackbox-UnityClient). The backend is hosted on Heroku, serving as a public IP to connect to. All components implement their networking protocol through Socket.io, a library used for its convenience and compatibility.
 
+## Trying out the application
+If you'd like to play this game, take a look at the following steps.
+1. [Clone this repo](https://github.com/lzhangivy/hackbox-UnityClient) and build it with Unity.
+2. Launch the built application.
+3. Using any web browser, head to [this website](http://www.dansinger.me/hackbox-web-client/) and enter the roomcode displayed on the Unity client.
+
+*Note that you'll need at least 3 people to play this game.*
+
 ## Messages
 ### From Browser
 **join room** - Add the socket to the room. Payload: 
