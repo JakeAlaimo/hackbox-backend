@@ -4,7 +4,7 @@ This is the Hackbox backend built with socket.io. It's only a mirror of what is 
 ![screenshot](mockup.png)
 
 ## The Big Picture
-Hackbox is a replication of Jackbox communication methods in the form of a category guessing game. Players use their smartphone web browsers to input and vote on player submissions. The project is broken into three components: a Node.js backend, a [Web client](https://github.com/dan-singer/hackbox-web-client), and a [Unity client](https://github.com/lzhangivy/hackbox-UnityClient). The backend is hosted on Heroku, serving as a public IP to connect to. All components implemented their networking protocol through Socket.io, a library used for its convenience and compatibility.
+Hackbox is a replication of Jackbox communication methods in the form of a category guessing game. Players use their smartphone web browsers to input and vote on player submissions. The project is broken into three components: a Node.js backend, a [Web client](https://github.com/dan-singer/hackbox-web-client), and a [Unity client](https://github.com/lzhangivy/hackbox-UnityClient). The backend is hosted on Heroku, serving as a public IP to connect to. All components implement their networking protocol through Socket.io, a library used for its convenience and compatibility.
 
 ## Messages
 ### From Browser
